@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Signed-Lead Intake Bridge</title>
+<meta name="description" content="GoHighLevel 'Signed' stage to MerusCase: contact dedupe, one injury per POST, firm ID maps, the three unmapped fields, and crash-safe retries - tested against a stand-in MerusCase.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Hegwer Law · GoHighLevel → MerusCase · working sample</p>
+    <h1>Signed lead in, one clean MerusCase case out</h1>
+    <p class="lede">When a lead reaches “Signed”, the bridge checks the data and finds the client if they already exist. Then it creates the case, adds each injury with its own POST, attaches the employer and records the referral source and signed date. If MerusCase saves something but the reply never arrives, the bridge reads it back instead of creating a second copy.</p>
+    <div class="kpis" id="kpis"></div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap tabrow" role="tablist">
+    <button role="tab" data-tab="flow">How it runs</button>
+    <button role="tab" data-tab="fields">29 fields</button>
+    <button role="tab" data-tab="dedupe">Dedupe</button>
+    <button role="tab" data-tab="safety">Injuries &amp; failures</button>
+    <button role="tab" data-tab="setup">Firm IDs &amp; setup</button>
+    <button role="tab" data-tab="tests">Tests</button>
+  </div>
+</nav>
+<main class="wrap">
+  <section id="p-flow" class="panel" role="tabpanel"></section>
+  <section id="p-fields" class="panel" role="tabpanel"></section>
+  <section id="p-dedupe" class="panel" role="tabpanel"></section>
+  <section id="p-safety" class="panel" role="tabpanel"></section>
+  <section id="p-setup" class="panel" role="tabpanel"></section>
+  <section id="p-tests" class="panel" role="tabpanel"></section>
+</main>
+<footer class="foot"><div class="wrap" id="foot"></div></footer>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "_note": "Firm-specific MerusCase IDs. PLACEHOLDERS until read from Hegwer Law's instance (users/index, caseTypes/index, activityTypes/index, and the spreadsheet for statuses, venues, offices). npm run check-config verifies every ID against the live API.",
+  "signedStage": { "pipeline": "Intake", "stage": "Signed" },
+  "maxInjuries": 3,
+  "caseFile": {
+    "case_type_id": 10001,
+    "case_status_id": 1001,
+    "office_id": 1,
+    "venue_id_by_county": { "Marin": 31, "Sonoma": 32, "San Francisco": 30, "Alameda": 33, "Contra Costa": 33, "_default": 30 }
+  },
+  "users": {
+    "Dan Hegwer": 501,
+    "Intake Staff": 502
+  },
+  "activityTypes": {
+    "referral": { "label": "Intake: referral source", "id": 9001 },
+    "signed": { "label": "Retainer signed", "id": 9002 },
+    "intakeNote": { "label": "Intake: data notes", "id": 9003 }
+  },
+  "employerPartyGroup": "Employer",
+  "injuryTypeIds": { "CT": 1, "SPECIFIC": 2 },
+  "ghlWriteBack": { "tagCreated": "merus-case-created", "tagHeld": "merus-needs-review" }
+}

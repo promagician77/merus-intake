@@ -1,0 +1,1169 @@
+{
+ "generatedAt": "2026-11-05T15:06:49.588Z",
+ "fields": [
+  {
+   "n": 1,
+   "label": "First name",
+   "scope": "contact",
+   "target": "Contact.first_name",
+   "source": "sheet",
+   "required": true
+  },
+  {
+   "n": 2,
+   "label": "Last name",
+   "scope": "contact",
+   "target": "Contact.last_name",
+   "source": "sheet",
+   "required": true
+  },
+  {
+   "n": 3,
+   "label": "Middle name",
+   "scope": "contact",
+   "target": "Contact.middle_name",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 4,
+   "label": "Date of birth",
+   "scope": "contact",
+   "target": "Contact.birth_date",
+   "source": "sheet",
+   "required": true
+  },
+  {
+   "n": 5,
+   "label": "Mobile phone",
+   "scope": "contact",
+   "target": "Contact.cell_phone",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 6,
+   "label": "Home phone",
+   "scope": "contact",
+   "target": "Contact.home_phone",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 7,
+   "label": "Email",
+   "scope": "contact",
+   "target": "Contact.email",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 8,
+   "label": "Street address",
+   "scope": "contact",
+   "target": "Contact.address",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 9,
+   "label": "Apt / unit",
+   "scope": "contact",
+   "target": "Contact.address2",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 10,
+   "label": "City",
+   "scope": "contact",
+   "target": "Contact.city",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 11,
+   "label": "State",
+   "scope": "contact",
+   "target": "Contact.state",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 12,
+   "label": "ZIP",
+   "scope": "contact",
+   "target": "Contact.zip",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 13,
+   "label": "Preferred language",
+   "scope": "contact",
+   "target": "Contact.language",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 14,
+   "label": "Date of injury (CT start)",
+   "scope": "injury",
+   "target": "Injury.date_of_injury",
+   "source": "docs",
+   "required": true
+  },
+  {
+   "n": 15,
+   "label": "CT end date",
+   "scope": "injury",
+   "target": "Injury.date_of_injury_end",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 16,
+   "label": "Injury type (Specific / CT)",
+   "scope": "injury",
+   "target": "Injury.injury_type_id",
+   "source": "docs",
+   "required": true
+  },
+  {
+   "n": 17,
+   "label": "Body parts",
+   "scope": "injury",
+   "target": "Injury.q1_injury_description_N",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 18,
+   "label": "Injury description",
+   "scope": "injury",
+   "target": "Injury.q1_injury_description_text",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 19,
+   "label": "How it happened",
+   "scope": "injury",
+   "target": "Injury.q2_injury_occurrence",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 20,
+   "label": "Occupation",
+   "scope": "injury",
+   "target": "Injury.q1_occupation",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 21,
+   "label": "Where it happened",
+   "scope": "injury",
+   "target": "Injury.q1_location",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 22,
+   "label": "Carrier claim number",
+   "scope": "injury",
+   "target": "Injury.carrier_claim_number",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 23,
+   "label": "EAMS ADJ number",
+   "scope": "injury",
+   "target": "Injury.eams_case_number",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 24,
+   "label": "Treating doctors",
+   "scope": "injury",
+   "target": "Injury.q7_doctors",
+   "source": "docs",
+   "required": false
+  },
+  {
+   "n": 25,
+   "label": "Assigned attorney",
+   "scope": "case",
+   "target": "CaseFile.attorney_user_id",
+   "source": "sheet",
+   "required": true
+  },
+  {
+   "n": 26,
+   "label": "Case manager",
+   "scope": "case",
+   "target": "CaseFile.staff_user_id",
+   "source": "sheet",
+   "required": false
+  },
+  {
+   "n": 27,
+   "label": "Employer",
+   "scope": "gap",
+   "target": "parties/add (Employer contact)",
+   "source": "gap",
+   "required": false
+  },
+  {
+   "n": 28,
+   "label": "Referral source",
+   "scope": "gap",
+   "target": "activities/add (Intake: referral source)",
+   "source": "gap",
+   "required": false
+  },
+  {
+   "n": 29,
+   "label": "Signed date",
+   "scope": "gap",
+   "target": "activities/add (Retainer signed; dated)",
+   "source": "gap",
+   "required": true
+  }
+ ],
+ "dedupe": {
+  "existing": 3000,
+  "built": {
+   "cases": 3000,
+   "added": 3015,
+   "refreshed": 0,
+   "calls": 6016,
+   "contacts": 3015
+  },
+  "buildMs": 4345,
+  "matchMs": 781,
+  "leads": 300,
+  "returning": {
+   "linked-correct": 118,
+   "review": 2
+  },
+  "fresh": {
+   "new": 149,
+   "review": 1
+  },
+  "lookalike": {
+   "new": 10,
+   "review": 20
+  },
+  "byVariant": {
+   "returning:exact": {
+    "linked-correct": 15
+   },
+   "returning:nickname": {
+    "linked-correct": 5
+   },
+   "returning:accents": {
+    "linked-correct": 11
+   },
+   "returning:phone-format": {
+    "linked-correct": 17
+   },
+   "returning:new-phone": {
+    "linked-correct": 11
+   },
+   "returning:email-case": {
+    "linked-correct": 11
+   },
+   "returning:hyphen": {
+    "linked-correct": 10,
+    "review": 1
+   },
+   "returning:swapped": {
+    "linked-correct": 10,
+    "review": 1
+   },
+   "returning:name-dob-only": {
+    "linked-correct": 11
+   },
+   "returning:middle-name": {
+    "linked-correct": 10
+   },
+   "returning:typo": {
+    "linked-correct": 7
+   },
+   "lookalike:same-name-other-dob": {
+    "new": 10
+   },
+   "lookalike:household-phone": {
+    "review": 10
+   },
+   "lookalike:junior-same-phone": {
+    "review": 10
+   }
+  },
+  "wrongLinks": 0,
+  "avgCandidates": 46,
+  "samples": [
+   {
+    "kind": "returning",
+    "variant": "swapped",
+    "outcome": "review",
+    "reason": "2 existing contacts match",
+    "considered": 51
+   },
+   {
+    "kind": "returning",
+    "variant": "hyphen",
+    "outcome": "review",
+    "reason": "2 existing contacts match",
+    "considered": 51
+   },
+   {
+    "kind": "new",
+    "variant": "new",
+    "outcome": "review",
+    "reason": "date of birth and part of the name",
+    "considered": 37
+   },
+   {
+    "kind": "lookalike",
+    "variant": "household-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 34
+   },
+   {
+    "kind": "lookalike",
+    "variant": "junior-same-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 38
+   },
+   {
+    "kind": "lookalike",
+    "variant": "household-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 44
+   },
+   {
+    "kind": "lookalike",
+    "variant": "junior-same-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 45
+   },
+   {
+    "kind": "lookalike",
+    "variant": "household-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 50
+   },
+   {
+    "kind": "lookalike",
+    "variant": "junior-same-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 43
+   },
+   {
+    "kind": "lookalike",
+    "variant": "household-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 48
+   },
+   {
+    "kind": "lookalike",
+    "variant": "junior-same-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 42
+   },
+   {
+    "kind": "lookalike",
+    "variant": "household-phone",
+    "outcome": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "considered": 34
+   }
+  ]
+ },
+ "index": {
+  "cases": 3000,
+  "contacts": 3015,
+  "calls": 6016,
+  "modelMsPerCall": 500,
+  "modelMinutes": 50
+ },
+ "day": {
+  "posted": 50,
+  "unique": 40,
+  "redeliveries": 10,
+  "byKind": {
+   "new, 1 injury": 20,
+   "new, 2 injuries": 6,
+   "new, 3 injuries": 3,
+   "returning client": 5,
+   "held: CT without end date": 1,
+   "held: unknown body part": 1,
+   "held: attorney not mapped": 1,
+   "review: shares a phone": 2,
+   "ignored: other stage": 1
+  },
+  "statuses": {
+   "done": 33,
+   "review": 3,
+   "held": 3
+  },
+  "newCases": 33,
+  "linked": 5,
+  "census": {
+   "injuriesNew": 45,
+   "duplicateInjuries": 0,
+   "duplicateParties": 0,
+   "duplicateActivities": 0
+  },
+  "faults": 14,
+  "faultsUsed": 14,
+  "reconciled": 10,
+  "writes": 156,
+  "elapsedMs": 593,
+  "ackP50": 3,
+  "ackP95": 8.5,
+  "retried": 11,
+  "outcomes": [
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 2
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "review",
+    "reason": "date of birth and part of the name",
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 1 injury",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 2 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 2 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 2 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 2 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 2 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 2 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 3 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 3 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "new, 3 injuries",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "returning client",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "returning client",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "returning client",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "returning client",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "returning client",
+    "status": "done",
+    "reason": null,
+    "deliveries": 1
+   },
+   {
+    "kind": "held: CT without end date",
+    "status": "held",
+    "reason": "Injury 1: CT injury needs an end date",
+    "deliveries": 1
+   },
+   {
+    "kind": "held: unknown body part",
+    "status": "held",
+    "reason": "Body parts (injury 1): unknown body part: spleen",
+    "deliveries": 1
+   },
+   {
+    "kind": "held: attorney not mapped",
+    "status": "held",
+    "reason": "Assigned attorney \"Associate (new hire)\" has no MerusCase user ID in config/firm.json",
+    "deliveries": 1
+   },
+   {
+    "kind": "review: shares a phone",
+    "status": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "deliveries": 1
+   },
+   {
+    "kind": "review: shares a phone",
+    "status": "review",
+    "reason": "phone on file for someone with a different date of birth",
+    "deliveries": 1
+   }
+  ]
+ },
+ "sample": {
+  "body": {
+   "contact_id": "ghl_9",
+   "pipeline_name": "Intake",
+   "pipeline_stage": "Signed",
+   "first_name": "Rosa",
+   "last_name": "Peña",
+   "date_of_birth": "1984-07-19",
+   "phone": "(415) 555-0147",
+   "email": "rosa.example@example.com",
+   "home_phone": "",
+   "address1": "483 Fourth St",
+   "city": "San Rafael",
+   "state": "CA",
+   "postal_code": "94901",
+   "preferred_language": "Spanish",
+   "occupation": "Carpenter",
+   "treating_doctors": "",
+   "assigned_attorney": "Dan Hegwer",
+   "case_manager": "Intake Staff",
+   "employer_name": "North Bay Builders, Inc.",
+   "referral_source": "Former client",
+   "signed_date": "2026-10-20",
+   "injury_1_type": "CT",
+   "injury_1_date": "2022-02-01",
+   "injury_1_end_date": "2025-08-29",
+   "injury_1_body_parts": "bilateral wrists, right shoulder, neck",
+   "injury_1_description": "Wrists, shoulder and neck from years of overhead work",
+   "injury_1_how": "Daily overhead drilling and framing",
+   "injury_1_location": "Employer premises",
+   "injury_1_claim_number": "NB-2025-00871",
+   "injury_1_adj_number": "",
+   "injury_2_type": "Specific",
+   "injury_2_date": "2025-09-12",
+   "injury_2_end_date": "",
+   "injury_2_body_parts": "low back, L knee",
+   "injury_2_description": "Low back strain lifting drywall",
+   "injury_2_how": "Lifting drywall sheets from the truck",
+   "injury_2_location": "Employer premises",
+   "injury_2_claim_number": "NB-2025-01204",
+   "injury_2_adj_number": ""
+  },
+  "posts": [
+   {
+    "endpoint": "caseFiles/add",
+    "fields": [
+     [
+      "[CaseFile][case_type_id]",
+      "10001"
+     ],
+     [
+      "[CaseFile][case_status_id]",
+      "1001"
+     ],
+     [
+      "[CaseFile][office_id]",
+      "1"
+     ],
+     [
+      "[CaseFile][venue_id]",
+      "30"
+     ],
+     [
+      "[CaseFile][attorney_user_id]",
+      "501"
+     ],
+     [
+      "[CaseFile][staff_user_id]",
+      "502"
+     ],
+     [
+      "[Contact][first_name]",
+      "Rosa"
+     ],
+     [
+      "[Contact][last_name]",
+      "Peña"
+     ],
+     [
+      "[Contact][birth_date]",
+      "07/19/1984"
+     ],
+     [
+      "[Contact][cell_phone]",
+      "4155550147"
+     ],
+     [
+      "[Contact][email]",
+      "rosa.example@example.com"
+     ],
+     [
+      "[Contact][address]",
+      "483 Fourth St"
+     ],
+     [
+      "[Contact][city]",
+      "San Rafael"
+     ],
+     [
+      "[Contact][state]",
+      "CA"
+     ],
+     [
+      "[Contact][zip]",
+      "94901"
+     ],
+     [
+      "[Contact][language]",
+      "Spanish"
+     ],
+     [
+      "[Injury][injury_type_id]",
+      "1"
+     ],
+     [
+      "[Injury][date_of_injury]",
+      "02/01/2022"
+     ],
+     [
+      "[Injury][date_of_injury_end]",
+      "08/29/2025"
+     ],
+     [
+      "[Injury][q1_injury_description_text]",
+      "Wrists, shoulder and neck from years of overhead work"
+     ],
+     [
+      "[Injury][q2_injury_occurrence]",
+      "Daily overhead drilling and framing"
+     ],
+     [
+      "[Injury][q1_occupation]",
+      "Carpenter"
+     ],
+     [
+      "[Injury][q1_location]",
+      "Employer premises"
+     ],
+     [
+      "[Injury][carrier_claim_number]",
+      "NB-2025-00871"
+     ],
+     [
+      "[Injury][q1_injury_description_1_id]",
+      "9"
+     ],
+     [
+      "[Injury][q1_injury_description_1_lr]",
+      "3"
+     ],
+     [
+      "[Injury][q1_injury_description_2_id]",
+      "5"
+     ],
+     [
+      "[Injury][q1_injury_description_2_lr]",
+      "2"
+     ],
+     [
+      "[Injury][q1_injury_description_3_id]",
+      "2"
+     ],
+     [
+      "[Injury][q1_injury_description_3_lr]",
+      "0"
+     ]
+    ]
+   },
+   {
+    "endpoint": "injuries/edit",
+    "fields": [
+     [
+      "[Injury][case_file_id]",
+      "5001"
+     ],
+     [
+      "[Injury][injury_type_id]",
+      "2"
+     ],
+     [
+      "[Injury][date_of_injury]",
+      "09/12/2025"
+     ],
+     [
+      "[Injury][q1_injury_description_text]",
+      "Low back strain lifting drywall"
+     ],
+     [
+      "[Injury][q2_injury_occurrence]",
+      "Lifting drywall sheets from the truck"
+     ],
+     [
+      "[Injury][q1_occupation]",
+      "Carpenter"
+     ],
+     [
+      "[Injury][q1_location]",
+      "Employer premises"
+     ],
+     [
+      "[Injury][carrier_claim_number]",
+      "NB-2025-01204"
+     ],
+     [
+      "[Injury][q1_injury_description_1_id]",
+      "4"
+     ],
+     [
+      "[Injury][q1_injury_description_1_lr]",
+      "0"
+     ],
+     [
+      "[Injury][q1_injury_description_2_id]",
+      "14"
+     ],
+     [
+      "[Injury][q1_injury_description_2_lr]",
+      "1"
+     ]
+    ]
+   },
+   {
+    "endpoint": "contacts/add",
+    "fields": [
+     [
+      "[Contact][company_name]",
+      "North Bay Builders, Inc."
+     ],
+     [
+      "[Contact][is_company]",
+      "1"
+     ]
+    ]
+   },
+   {
+    "endpoint": "parties/add",
+    "fields": [
+     [
+      "[Party][contact_id]",
+      "1002"
+     ],
+     [
+      "[Party][case_file_id]",
+      "5001"
+     ]
+    ]
+   },
+   {
+    "endpoint": "activities/add",
+    "fields": [
+     [
+      "[Activity][case_file_id]",
+      "5001"
+     ],
+     [
+      "[Activity][activity_type_id][]",
+      "9001"
+     ],
+     [
+      "[Activity][activity]",
+      "Referral source: Former client [intake contact:ghl_9:2026-10-20 referral]"
+     ]
+    ]
+   },
+   {
+    "endpoint": "activities/add",
+    "fields": [
+     [
+      "[Activity][case_file_id]",
+      "5001"
+     ],
+     [
+      "[Activity][activity_type_id][]",
+      "9002"
+     ],
+     [
+      "[Activity][activity]",
+      "Retainer signed 2026-10-20 (from GoHighLevel) [intake contact:ghl_9:2026-10-20 signed]"
+     ],
+     [
+      "[Activity][date]",
+      "2026-10-20 09:00:00"
+     ]
+    ]
+   }
+  ],
+  "ghl": {
+   "tags": [
+    {
+     "contactId": "ghl_9",
+     "tags": [
+      "merus-case-created"
+     ]
+    }
+   ],
+   "notes": [
+    {
+     "contactId": "ghl_9",
+     "body": "MerusCase case 5001 created (contact 1001, 2 injuries)."
+    }
+   ]
+  }
+ },
+ "tests": [
+  {
+   "ok": true,
+   "name": "nickname, no accents, hyphen dropped, same DOB: links"
+  },
+  {
+   "ok": true,
+   "name": "same name, different DOB, nothing shared: a different person, so a new contact"
+  },
+  {
+   "ok": true,
+   "name": "Sr. and Jr. share a phone: the son is never linked to the father"
+  },
+  {
+   "ok": true,
+   "name": "a name alone never links: no DOB and no phone or email goes to review"
+  },
+  {
+   "ok": true,
+   "name": "first and last name typed the wrong way round: links"
+  },
+  {
+   "ok": true,
+   "name": "employers: one contact per company however the name is written"
+  },
+  {
+   "ok": true,
+   "name": "synthetic file of 600 clients, 80 leads: no wrong links; returning clients mostly linked; lookalikes never linked"
+  },
+  {
+   "ok": true,
+   "name": "webhook auth: Bearer token or ?key=; anything else is 401"
+  },
+  {
+   "ok": true,
+   "name": "webhook hygiene: other stages ignored, bad JSON 400, oversized body 413, no IDs 422"
+  },
+  {
+   "ok": true,
+   "name": "a new client with three injuries: one caseFiles/add, then injuries/edit twice, employer party, two activities"
+  },
+  {
+   "ok": true,
+   "name": "the same webhook delivered again, or the lead re-entering Signed, never makes a second case"
+  },
+  {
+   "ok": true,
+   "name": "an existing client: caseFiles/add gets the contact ID; only blank fields are filled; differences become a case note"
+  },
+  {
+   "ok": true,
+   "name": "a lead that fails the checks is held, tagged in GoHighLevel, and runs once fixed and sent again"
+  },
+  {
+   "ok": true,
+   "name": "a possible duplicate waits for staff; resolving it links the chosen contact"
+  },
+  {
+   "ok": true,
+   "name": "admin endpoints need the admin token"
+  },
+  {
+   "ok": true,
+   "name": "a contact created by one intake is found by the next one, even before the index refresh"
+  },
+  {
+   "ok": true,
+   "name": "MerusCase saves the case but the reply is lost (500 after saving): found by a read, not sent again"
+  },
+  {
+   "ok": true,
+   "name": "MerusCase saves the injury but the reply is lost (500 after saving): found by a read, not sent again"
+  },
+  {
+   "ok": true,
+   "name": "MerusCase saves the employer party but the reply is lost (500 after saving): found by a read, not sent again"
+  },
+  {
+   "ok": true,
+   "name": "MerusCase saves the activity but the reply is lost (500 after saving): found by a read, not sent again"
+  },
+  {
+   "ok": true,
+   "name": "the connection drops after caseFiles/add is saved: still one case"
+  },
+  {
+   "ok": true,
+   "name": "a 500 before saving is simply retried"
+  },
+  {
+   "ok": true,
+   "name": "429 rate limit: waits and carries on"
+  },
+  {
+   "ok": true,
+   "name": "the bridge dies right after MerusCase saved injury 3 (journal says \"sent\"): on restart it reads back instead of resending"
+  },
+  {
+   "ok": true,
+   "name": "MerusCase refuses a step (400): the intake fails with the step named, and Retry resumes where it stopped"
+  },
+  {
+   "ok": true,
+   "name": "caseFiles/add with two injuries is refused by MerusCase - the bridge never sends more than one"
+  },
+  {
+   "ok": true,
+   "name": "check-config: users, case type and activity types verified; statuses, venues, offices listed for a manual check"
+  },
+  {
+   "ok": true,
+   "name": "check-config: a wrong user ID is reported; --create adds missing activity types"
+  },
+  {
+   "ok": true,
+   "name": "index build: 300 cases -> every applicant and employer indexed, through published endpoints only"
+  },
+  {
+   "ok": true,
+   "name": "index refresh: only cases modified since the last build are read"
+  },
+  {
+   "ok": true,
+   "name": "the field map has 29 fields: 13 contact, 11 injury, 2 case, 3 without an API field"
+  },
+  {
+   "ok": true,
+   "name": "the GoHighLevel body template carries every mapped field, three injury slots each"
+  },
+  {
+   "ok": true,
+   "name": "dates: ISO, US, two-digit years and \"Mar 4th 2026\"; impossible dates rejected"
+  },
+  {
+   "ok": true,
+   "name": "phones: any US format becomes 10 digits"
+  },
+  {
+   "ok": true,
+   "name": "injury type: CT and Specific in the ways intake staff write them"
+  },
+  {
+   "ok": true,
+   "name": "body parts: IDs plus laterality; left + right of one part becomes bilateral; unknown words are reported"
+  },
+  {
+   "ok": true,
+   "name": "EAMS case numbers: ADJ plus 7 or 8 digits"
+  },
+  {
+   "ok": true,
+   "name": "names: accents, hyphens, Jr./Sr. and nicknames (English and Spanish) normalise for matching"
+  },
+  {
+   "ok": true,
+   "name": "webhook bodies: keys match regardless of case and spacing, nested custom data is found"
+  },
+  {
+   "ok": true,
+   "name": "unrendered merge tags count as blank, not as data"
+  },
+  {
+   "ok": true,
+   "name": "lead: three injuries read from numbered fields; occupation copied into each"
+  },
+  {
+   "ok": true,
+   "name": "validation: a CT injury needs an end date after its start"
+  },
+  {
+   "ok": true,
+   "name": "validation: future dates, unmapped attorney, unknown body part, repeated injury, too many injuries"
+  },
+  {
+   "ok": true,
+   "name": "validation: a clean lead passes"
+  },
+  {
+   "ok": true,
+   "name": "injury fields use the published injuries/edit names and formats"
+  },
+  {
+   "ok": true,
+   "name": "a specific injury sends no end date; contact dates go out as MM/DD/YYYY"
+  },
+  {
+   "ok": true,
+   "name": "POST bodies are data[Model][field], arrays as field[]"
+  }
+ ]
+}

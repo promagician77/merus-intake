@@ -1,0 +1,296 @@
+
+> hegwer-ghl-merus-intake@0.1.0 test
+> node --disable-warning=ExperimentalWarning --test --test-concurrency=1 test/*.test.js
+
+TAP version 13
+# Subtest: nickname, no accents, hyphen dropped, same DOB: links
+ok 1 - nickname, no accents, hyphen dropped, same DOB: links
+  ---
+  duration_ms: 3.220493
+  type: 'test'
+  ...
+# Subtest: same name, different DOB, nothing shared: a different person, so a new contact
+ok 2 - same name, different DOB, nothing shared: a different person, so a new contact
+  ---
+  duration_ms: 0.777605
+  type: 'test'
+  ...
+# Subtest: Sr. and Jr. share a phone: the son is never linked to the father
+ok 3 - Sr. and Jr. share a phone: the son is never linked to the father
+  ---
+  duration_ms: 0.906557
+  type: 'test'
+  ...
+# Subtest: a name alone never links: no DOB and no phone or email goes to review
+ok 4 - a name alone never links: no DOB and no phone or email goes to review
+  ---
+  duration_ms: 0.700632
+  type: 'test'
+  ...
+# Subtest: first and last name typed the wrong way round: links
+ok 5 - first and last name typed the wrong way round: links
+  ---
+  duration_ms: 1.063635
+  type: 'test'
+  ...
+# Subtest: employers: one contact per company however the name is written
+ok 6 - employers: one contact per company however the name is written
+  ---
+  duration_ms: 0.430263
+  type: 'test'
+  ...
+# Subtest: synthetic file of 600 clients, 80 leads: no wrong links; returning clients mostly linked; lookalikes never linked
+ok 7 - synthetic file of 600 clients, 80 leads: no wrong links; returning clients mostly linked; lookalikes never linked
+  ---
+  duration_ms: 1542.138473
+  type: 'test'
+  ...
+# Subtest: webhook auth: Bearer token or ?key=; anything else is 401
+ok 8 - webhook auth: Bearer token or ?key=; anything else is 401
+  ---
+  duration_ms: 55.044651
+  type: 'test'
+  ...
+# Subtest: webhook hygiene: other stages ignored, bad JSON 400, oversized body 413, no IDs 422
+ok 9 - webhook hygiene: other stages ignored, bad JSON 400, oversized body 413, no IDs 422
+  ---
+  duration_ms: 33.993259
+  type: 'test'
+  ...
+# Subtest: a new client with three injuries: one caseFiles/add, then injuries/edit twice, employer party, two activities
+ok 10 - a new client with three injuries: one caseFiles/add, then injuries/edit twice, employer party, two activities
+  ---
+  duration_ms: 77.518146
+  type: 'test'
+  ...
+# Subtest: the same webhook delivered again, or the lead re-entering Signed, never makes a second case
+ok 11 - the same webhook delivered again, or the lead re-entering Signed, never makes a second case
+  ---
+  duration_ms: 53.549803
+  type: 'test'
+  ...
+# Subtest: an existing client: caseFiles/add gets the contact ID; only blank fields are filled; differences become a case note
+ok 12 - an existing client: caseFiles/add gets the contact ID; only blank fields are filled; differences become a case note
+  ---
+  duration_ms: 36.283193
+  type: 'test'
+  ...
+# Subtest: a lead that fails the checks is held, tagged in GoHighLevel, and runs once fixed and sent again
+ok 13 - a lead that fails the checks is held, tagged in GoHighLevel, and runs once fixed and sent again
+  ---
+  duration_ms: 42.631564
+  type: 'test'
+  ...
+# Subtest: a possible duplicate waits for staff; resolving it links the chosen contact
+ok 14 - a possible duplicate waits for staff; resolving it links the chosen contact
+  ---
+  duration_ms: 34.775608
+  type: 'test'
+  ...
+# Subtest: admin endpoints need the admin token
+ok 15 - admin endpoints need the admin token
+  ---
+  duration_ms: 6.348292
+  type: 'test'
+  ...
+# Subtest: a contact created by one intake is found by the next one, even before the index refresh
+ok 16 - a contact created by one intake is found by the next one, even before the index refresh
+  ---
+  duration_ms: 45.421526
+  type: 'test'
+  ...
+# Subtest: MerusCase saves the case but the reply is lost (500 after saving): found by a read, not sent again
+ok 17 - MerusCase saves the case but the reply is lost (500 after saving): found by a read, not sent again
+  ---
+  duration_ms: 139.392615
+  type: 'test'
+  ...
+# Subtest: MerusCase saves the injury but the reply is lost (500 after saving): found by a read, not sent again
+ok 18 - MerusCase saves the injury but the reply is lost (500 after saving): found by a read, not sent again
+  ---
+  duration_ms: 57.15009
+  type: 'test'
+  ...
+# Subtest: MerusCase saves the employer party but the reply is lost (500 after saving): found by a read, not sent again
+ok 19 - MerusCase saves the employer party but the reply is lost (500 after saving): found by a read, not sent again
+  ---
+  duration_ms: 49.516532
+  type: 'test'
+  ...
+# Subtest: MerusCase saves the activity but the reply is lost (500 after saving): found by a read, not sent again
+ok 20 - MerusCase saves the activity but the reply is lost (500 after saving): found by a read, not sent again
+  ---
+  duration_ms: 32.745159
+  type: 'test'
+  ...
+# Subtest: the connection drops after caseFiles/add is saved: still one case
+ok 21 - the connection drops after caseFiles/add is saved: still one case
+  ---
+  duration_ms: 44.030254
+  type: 'test'
+  ...
+# Subtest: a 500 before saving is simply retried
+ok 22 - a 500 before saving is simply retried
+  ---
+  duration_ms: 42.097833
+  type: 'test'
+  ...
+# Subtest: 429 rate limit: waits and carries on
+ok 23 - 429 rate limit: waits and carries on
+  ---
+  duration_ms: 19.283496
+  type: 'test'
+  ...
+# Subtest: the bridge dies right after MerusCase saved injury 3 (journal says "sent"): on restart it reads back instead of resending
+ok 24 - the bridge dies right after MerusCase saved injury 3 (journal says "sent"): on restart it reads back instead of resending
+  ---
+  duration_ms: 23.422695
+  type: 'test'
+  ...
+# Subtest: MerusCase refuses a step (400): the intake fails with the step named, and Retry resumes where it stopped
+ok 25 - MerusCase refuses a step (400): the intake fails with the step named, and Retry resumes where it stopped
+  ---
+  duration_ms: 78.1107
+  type: 'test'
+  ...
+# Subtest: caseFiles/add with two injuries is refused by MerusCase - the bridge never sends more than one
+ok 26 - caseFiles/add with two injuries is refused by MerusCase - the bridge never sends more than one
+  ---
+  duration_ms: 7.359034
+  type: 'test'
+  ...
+# Subtest: check-config: users, case type and activity types verified; statuses, venues, offices listed for a manual check
+ok 27 - check-config: users, case type and activity types verified; statuses, venues, offices listed for a manual check
+  ---
+  duration_ms: 63.888823
+  type: 'test'
+  ...
+# Subtest: check-config: a wrong user ID is reported; --create adds missing activity types
+ok 28 - check-config: a wrong user ID is reported; --create adds missing activity types
+  ---
+  duration_ms: 33.971435
+  type: 'test'
+  ...
+# Subtest: index build: 300 cases -> every applicant and employer indexed, through published endpoints only
+ok 29 - index build: 300 cases -> every applicant and employer indexed, through published endpoints only
+  ---
+  duration_ms: 823.983753
+  type: 'test'
+  ...
+# Subtest: index refresh: only cases modified since the last build are read
+ok 30 - index refresh: only cases modified since the last build are read
+  ---
+  duration_ms: 479.419318
+  type: 'test'
+  ...
+# Subtest: the field map has 29 fields: 13 contact, 11 injury, 2 case, 3 without an API field
+ok 31 - the field map has 29 fields: 13 contact, 11 injury, 2 case, 3 without an API field
+  ---
+  duration_ms: 2.581649
+  type: 'test'
+  ...
+# Subtest: the GoHighLevel body template carries every mapped field, three injury slots each
+ok 32 - the GoHighLevel body template carries every mapped field, three injury slots each
+  ---
+  duration_ms: 1.031695
+  type: 'test'
+  ...
+# Subtest: dates: ISO, US, two-digit years and "Mar 4th 2026"; impossible dates rejected
+ok 33 - dates: ISO, US, two-digit years and "Mar 4th 2026"; impossible dates rejected
+  ---
+  duration_ms: 1.542521
+  type: 'test'
+  ...
+# Subtest: phones: any US format becomes 10 digits
+ok 34 - phones: any US format becomes 10 digits
+  ---
+  duration_ms: 0.350308
+  type: 'test'
+  ...
+# Subtest: injury type: CT and Specific in the ways intake staff write them
+ok 35 - injury type: CT and Specific in the ways intake staff write them
+  ---
+  duration_ms: 0.67156
+  type: 'test'
+  ...
+# Subtest: body parts: IDs plus laterality; left + right of one part becomes bilateral; unknown words are reported
+ok 36 - body parts: IDs plus laterality; left + right of one part becomes bilateral; unknown words are reported
+  ---
+  duration_ms: 1.515431
+  type: 'test'
+  ...
+# Subtest: EAMS case numbers: ADJ plus 7 or 8 digits
+ok 37 - EAMS case numbers: ADJ plus 7 or 8 digits
+  ---
+  duration_ms: 0.360527
+  type: 'test'
+  ...
+# Subtest: names: accents, hyphens, Jr./Sr. and nicknames (English and Spanish) normalise for matching
+ok 38 - names: accents, hyphens, Jr./Sr. and nicknames (English and Spanish) normalise for matching
+  ---
+  duration_ms: 0.439048
+  type: 'test'
+  ...
+# Subtest: webhook bodies: keys match regardless of case and spacing, nested custom data is found
+ok 39 - webhook bodies: keys match regardless of case and spacing, nested custom data is found
+  ---
+  duration_ms: 0.743074
+  type: 'test'
+  ...
+# Subtest: unrendered merge tags count as blank, not as data
+ok 40 - unrendered merge tags count as blank, not as data
+  ---
+  duration_ms: 2.094337
+  type: 'test'
+  ...
+# Subtest: lead: three injuries read from numbered fields; occupation copied into each
+ok 41 - lead: three injuries read from numbered fields; occupation copied into each
+  ---
+  duration_ms: 0.838349
+  type: 'test'
+  ...
+# Subtest: validation: a CT injury needs an end date after its start
+ok 42 - validation: a CT injury needs an end date after its start
+  ---
+  duration_ms: 1.264789
+  type: 'test'
+  ...
+# Subtest: validation: future dates, unmapped attorney, unknown body part, repeated injury, too many injuries
+ok 43 - validation: future dates, unmapped attorney, unknown body part, repeated injury, too many injuries
+  ---
+  duration_ms: 0.515197
+  type: 'test'
+  ...
+# Subtest: validation: a clean lead passes
+ok 44 - validation: a clean lead passes
+  ---
+  duration_ms: 0.385917
+  type: 'test'
+  ...
+# Subtest: injury fields use the published injuries/edit names and formats
+ok 45 - injury fields use the published injuries/edit names and formats
+  ---
+  duration_ms: 0.698552
+  type: 'test'
+  ...
+# Subtest: a specific injury sends no end date; contact dates go out as MM/DD/YYYY
+ok 46 - a specific injury sends no end date; contact dates go out as MM/DD/YYYY
+  ---
+  duration_ms: 0.645004
+  type: 'test'
+  ...
+# Subtest: POST bodies are data[Model][field], arrays as field[]
+ok 47 - POST bodies are data[Model][field], arrays as field[]
+  ---
+  duration_ms: 0.376515
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4542.705705

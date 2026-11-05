@@ -1,0 +1,30 @@
+n,ghl_key,label,scope,target,transform,required,source
+1,first_name,First name,contact,Contact.first_name,name,yes,sheet
+2,last_name,Last name,contact,Contact.last_name,name,yes,sheet
+3,middle_name,Middle name,contact,Contact.middle_name,name,no,sheet
+4,date_of_birth,Date of birth,contact,Contact.birth_date,date,yes,sheet
+5,phone,Mobile phone,contact,Contact.cell_phone,phone,no,sheet
+6,home_phone,Home phone,contact,Contact.home_phone,phone,no,sheet
+7,email,Email,contact,Contact.email,email,no,sheet
+8,address1,Street address,contact,Contact.address,text,no,sheet
+9,address2,Apt / unit,contact,Contact.address2,text,no,sheet
+10,city,City,contact,Contact.city,text,no,sheet
+11,state,State,contact,Contact.state,state,no,sheet
+12,postal_code,ZIP,contact,Contact.zip,zip,no,sheet
+13,preferred_language,Preferred language,contact,Contact.language,text,no,sheet
+14,injury_{n}_date,Date of injury (CT start),injury,Injury.date_of_injury,date,yes,docs
+15,injury_{n}_end_date,CT end date,injury,Injury.date_of_injury_end,date,no,docs
+16,injury_{n}_type,Injury type (Specific / CT),injury,Injury.injury_type_id,injury_type,yes,docs
+17,injury_{n}_body_parts,Body parts,injury,Injury.q1_injury_description_N,body_parts,no,docs
+18,injury_{n}_description,Injury description,injury,Injury.q1_injury_description_text,text,no,docs
+19,injury_{n}_how,How it happened,injury,Injury.q2_injury_occurrence,text,no,docs
+20,occupation,Occupation,injury,Injury.q1_occupation,text,no,docs
+21,injury_{n}_location,Where it happened,injury,Injury.q1_location,text,no,docs
+22,injury_{n}_claim_number,Carrier claim number,injury,Injury.carrier_claim_number,upper,no,docs
+23,injury_{n}_adj_number,EAMS ADJ number,injury,Injury.eams_case_number,adj,no,docs
+24,treating_doctors,Treating doctors,injury,Injury.q7_doctors,text,no,docs
+25,assigned_attorney,Assigned attorney,case,CaseFile.attorney_user_id,user,yes,sheet
+26,case_manager,Case manager,case,CaseFile.staff_user_id,user,no,sheet
+27,employer_name,Employer,gap,parties/add (Employer contact),text,no,gap
+28,referral_source,Referral source,gap,activities/add (Intake: referral source),text,no,gap
+29,signed_date,Signed date,gap,activities/add (Retainer signed; dated),date,yes,gap

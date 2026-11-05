@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Signed-Lead Intake Bridge</title>
+<style>
+  @page { size: Letter; margin: 0; }
+  :root { --ink: #13201c; --ink2: #3e4c48; --muted: #5f6d69; --line: #d6dfdb; --sunk: #edf2f0; --accent: #0e6b55; --accent-soft: #dcefe8; --navy: #1d2f4f; --navy-soft: #e1e7f2; --amber: #8a5a00; --amber-soft: #f6ead0; --good: #1f7048; --good-soft: #dff1e6; --bad: #a3271f; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; color: var(--ink); font: 10.3px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sheet { width: 8.5in; height: 11in; padding: 0.36in 0.42in 0.32in; display: flex; flex-direction: column; overflow: hidden; page-break-after: always; }
+  .sheet:last-child { page-break-after: auto; }
+  .head { display: flex; justify-content: space-between; border-bottom: 2px solid var(--navy); padding-bottom: 5px; margin-bottom: 9px; font: 700 8.4px system-ui; letter-spacing: .1em; text-transform: uppercase; color: var(--navy); }
+  .foot { margin-top: auto; border-top: 1px solid var(--line); padding-top: 5px; display: flex; justify-content: space-between; gap: 12px; font-size: 7.6px; color: var(--muted); }
+  h1, h2, h3 { font-family: Charter, "Bitstream Charter", Cambria, Georgia, serif; margin: 0; line-height: 1.15; }
+  h1 { font-size: 23px; margin-bottom: 3px; } h2 { font-size: 15px; margin: 10px 0 5px; } h3 { font-size: 10.5px; margin: 0 0 3px; }
+  p { margin: 0 0 4px; } .lede { color: var(--ink2); font-size: 9.8px; }
+  code { font: 8.2px ui-monospace, Menlo, Consolas, monospace; }
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--line); border-radius: 6px; margin-top: 7px; }
+  .kpis div { padding: 6px 8px; border-left: 1px solid var(--line); } .kpis div:first-child { border-left: 0; }
+  .kpis b { display: block; font: 600 14.5px/1.1 Georgia, serif; } .kpis span { font-size: 7.8px; color: var(--muted); }
+  .lanes { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 8px; }
+  .lane { border: 1px solid var(--line); border-radius: 6px; padding: 6px; }
+  .lane h3 { font: 700 7.6px system-ui; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 2px 5px; }
+  .b { border: 1px solid var(--line); border-radius: 4px; padding: 4px 6px; margin-bottom: 4px; background: #f8faf9; }
+  .b.key { border-color: var(--accent); background: var(--accent-soft); }
+  .b b { display: block; font-size: 8.8px; } .b span { display: block; font-size: 7.9px; color: var(--ink2); }
+  .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; } .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+  .gap { border: 1px solid var(--line); border-top: 3px solid var(--amber); border-radius: 5px; padding: 6px 8px; }
+  .gap .w { font: 700 8px ui-monospace, Menlo, monospace; color: var(--accent); margin: 2px 0 3px; }
+  .fl { columns: 3; column-gap: 12px; font-size: 8px; }
+  .fl div { break-inside: avoid; display: flex; gap: 4px; align-items: baseline; padding: 1.5px 0; border-bottom: 1px solid #edf1ef; }
+  .fl .n { color: var(--muted); width: 13px; text-align: right; } .fl .lab { flex: 1; } .fl .t { font: 7px ui-monospace, monospace; color: var(--ink2); }
+  .tag { display: inline-block; font: 700 6.8px/1 system-ui; text-transform: uppercase; letter-spacing: .04em; padding: 2px 3px; border-radius: 2px; white-space: nowrap; }
+  .docs { background: var(--good-soft); color: var(--good); } .sheetc { background: var(--navy-soft); color: var(--navy); } .gapc { background: var(--amber-soft); color: var(--amber); }
+  .ok { background: var(--good-soft); color: var(--good); } .warn { background: var(--amber-soft); color: var(--amber); } .plain { background: var(--sunk); color: var(--ink2); }
+  table { border-collapse: collapse; width: 100%; } th, td { text-align: left; padding: 3px 5px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 7.2px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); background: var(--sunk); } td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .ob { display: grid; grid-template-columns: 92px 1fr 104px; gap: 6px; align-items: center; margin: 3px 0; }
+  .ob .tr { display: flex; height: 14px; gap: 1.5px; background: var(--sunk); border-radius: 2px; overflow: hidden; }
+  .seg.link { background: var(--accent); } .seg.new { background: var(--navy); } .seg.review { background: var(--amber); }
+  .ob .v { text-align: right; color: var(--muted); font-size: 7.8px; }
+  .lg { display: flex; gap: 10px; font-size: 7.6px; color: var(--ink2); margin: 2px 0; } .lg i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 3px; vertical-align: -1px; }
+  ul.r { list-style: none; margin: 0; padding: 0; } ul.r li { display: grid; grid-template-columns: 38px 1fr; gap: 5px; padding: 2.5px 0; border-bottom: 1px solid #edf1ef; }
+  .st { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 5px; }
+  .st div { padding: 5px 7px; border-left: 1px solid var(--line); } .st div:first-child { border-left: 0; }
+  .st b { display: block; font: 600 14px/1.1 Georgia, serif; } .st span { font-size: 7.6px; color: var(--muted); }
+  .small { font-size: 7.8px; color: var(--muted); }
+  ol.s { margin: 0; padding-left: 13px; } ol.s li { margin: 1.5px 0; }
+</style>
+</head>
+<body>
+<section class="sheet" id="p1"></section>
+<section class="sheet" id="p2"></section>
+<script src="data.js"></script>
+<script>
+(function () {
+  var D = window.DATA, M = D.m, dd = M.dedupe, day = M.day, S = M.sample;
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var g = function (o, k) { return (o && o[k]) || 0; };
+  var fmt = function (n) { return Number(n).toLocaleString('en-US'); };
+  var head = function (n) { return '<div class="head"><span>Hegwer Law · GoHighLevel → MerusCase intake · working sample</span><span>' + n + ' / 2</span></div>'; };
+  var foot = '<div class="foot"><span>Run against a stand-in MerusCase built from the published API, plus a stand-in GoHighLevel. All people, cases and IDs are synthetic.</span><span>Full sample: [your Vercel link]</span></div>';
+  var src = { docs: 0, sheet: 0, gap: 0 }; M.fields.forEach(function (f) { src[f.source]++; });
+  var pass = M.tests.filter(function (t) { return t.ok; }).length;
+  var b = function (t, s, k) { return '<div class="b ' + (k || '') + '"><b>' + esc(t) + '</b><span>' + s + '</span></div>'; };
+
+  document.getElementById('p1').innerHTML = head(1) +
+    '<h1>Signed lead in, one clean MerusCase case out</h1><p class="lede">When a lead reaches “Signed”, the bridge checks the data and finds the client if they already exist. Then it creates the case, adds each injury with its own POST, attaches the employer and records the referral source and signed date. Lost replies are read back, never sent twice.</p>' +
+    '<div class="kpis">' + [[dd.wrongLinks + ' wrong links', '300 test leads vs ' + fmt(dd.existing) + ' synthetic clients; ' + g(dd.returning, 'linked-correct') + '/120 returning linked'], ['0 duplicates', day.faultsUsed + ' injected failures, ' + day.reconciled + ' lost replies read back'], ['1 POST per injury', day.census.injuriesNew + ' injuries on ' + day.newCases + ' cases'], ['29 of 29 fields', src.docs + ' published, ' + src.sheet + ' per your sheet, ' + src.gap + ' gaps solved'], [pass + ' / ' + M.tests.length + ' tests', 'webhook, mapping, dedupe, failures, setup']].map(function (k) { return '<div><b>' + esc(k[0]) + '</b><span>' + esc(k[1]) + '</span></div>'; }).join('') + '</div>' +
+    '<h2>How it runs</h2><div class="lanes">' +
+      '<div class="lane"><h3>GoHighLevel</h3>' + b('Pipeline Stage Changed', 'pipeline Intake → stage Signed') + b('Custom Webhook action', 'POST, Bearer token, JSON body from the template (' + Object.keys(D.template).length + ' keys, 3 injury slots)', 'key') + b('Told the result', 'tag + note with the case ID, or the reason it is held') + '</div>' +
+      '<div class="lane"><h3>Bridge</h3>' + b('202 in ~' + day.ackP50 + ' ms', 'stored under an idempotency key; a repeat delivery returns the first result') + b('Checks before any write', 'CT end date, future dates, unknown body parts, unmapped attorney, over 3 injuries: held, not half-created') + b('Finds the client', 'local index of MerusCase contacts: link / review / new', 'key') + '</div>' +
+      '<div class="lane"><h3>MerusCase (in order)</h3>' + b('1 caseFiles/add', 'case + contact (or the existing contact ID) + injury 1') + b('2 contacts/edit', 'returning clients: fill blanks only, never overwrite') + b('3 injuries/edit', 'injuries 2 and 3, no Injury ID = add (published)') + b('4 contacts/add → parties/add', 'employer, reused when already on file') + b('5 activities/add', 'referral source; “Retainer signed” dated on the signed date') + '</div>' +
+    '</div>' +
+    '<h2>The three fields with no API field</h2><div class="g3">' +
+      '<div class="gap"><h3>Employer</h3><div class="w">contacts/add (company) → parties/add</div><p>Company contact attached as a party. Before creating one, the bridge checks for it by normalised name, so “North Bay Builders, Inc.” and “NORTH BAY BUILDERS INC” share one contact.</p></div>' +
+      '<div class="gap"><h3>Referral source</h3><div class="w">activities/add · “Intake: referral source”</div><p>A firm activity type (created once with activityTypes/add) keeps referral sources filterable in the case activity log. GoHighLevel keeps them for marketing reports.</p></div>' +
+      '<div class="gap"><h3>Signed date</h3><div class="w">activities/add · “Retainer signed”, dated</div><p>activities/add takes a date, so the entry sits on the timeline on the day the client signed, not the day the bridge ran. date_opened too, if caseFiles/add accepts it.</p></div>' +
+    '</div>' +
+    '<h2>All 29 fields <span class="small" style="font-family:system-ui">(<span class="tag docs">published</span> injuries/edit names · <span class="tag sheetc">your sheet</span> caseFiles/add, not in the public docs · <span class="tag gapc">gap</span>)</span></h2>' +
+    '<div class="fl">' + M.fields.map(function (f) { return '<div><span class="n">' + f.n + '</span><span class="lab">' + esc(f.label) + '</span><span class="tag ' + (f.source === 'docs' ? 'docs' : f.source === 'sheet' ? 'sheetc' : 'gapc') + '">' + (f.source === 'docs' ? 'pub' : f.source === 'sheet' ? 'sheet' : 'gap') + '</span></div>'; }).join('') + '</div>' +
+    '<h2>One lead, every request</h2><p>A synthetic client with a CT injury and a specific injury: ' + S.posts.map(function (p) { return '<code>' + esc(p.endpoint) + '</code> (' + p.fields.length + ')'; }).join(' → ') + ' → GoHighLevel tag + note “' + esc(S.ghl.notes[0].body) + '”. Injury dates go out as MM/DD/YYYY, injury_type_id 1 = CT, 2 = Specific, and body parts as IDs with left/right (q1_injury_description_N_id / _lr, up to 10).</p>' +
+    '<h2>Checks that hold a lead before anything is written</h2><div class="fl" style="columns:2;font-size:8.4px">' + ['First name, last name or DOB missing; DOB implausible', 'No phone and no email', 'Injury type not Specific or CT', 'CT injury without an end date, or ending before it starts', 'Specific injury given an end date', 'Date of injury, CT end or signed date in the future', 'Body part the map does not know (\u201cspleen\u201d)', 'More than 10 body parts, or more than 3 injuries', 'The same injury twice (same type and date)', 'Attorney or case manager with no MerusCase user ID'].map(function (t) { return '<div><span class="tag warn">hold</span><span class="lab">' + esc(t) + '</span></div>'; }).join('') + '</div><p class="small" style="margin-top:3px">Held leads get a GoHighLevel tag and a note with the reasons; fixed and sent again, they run.</p>' +
+    foot;
+
+  var tot = function (o) { return Object.keys(o).reduce(function (s, k) { return s + o[k]; }, 0); };
+  var bar = function (l, o) { var t = tot(o); return '<div class="ob"><span>' + esc(l) + '</span><div class="tr">' + [['linked-correct', 'link'], ['new', 'new'], ['review', 'review']].map(function (s) { var n = g(o, s[0]); return n ? '<div class="seg ' + s[1] + '" style="width:' + (n / t * 100).toFixed(1) + '%"></div>' : ''; }).join('') + '</div><span class="v">' + [g(o, 'linked-correct') && g(o, 'linked-correct') + ' link', g(o, 'new') && g(o, 'new') + ' new', g(o, 'review') && g(o, 'review') + ' review'].filter(Boolean).join(' · ') + '</span></div>'; };
+  document.getElementById('p2').innerHTML = head(2) +
+    '<h2 style="margin-top:0">Dedupe: there is no contact search to call</h2><p>MerusCase’s published API reads a contact only by ID, and your endpoint list has no search. The bridge keeps a local index built through published endpoints: caseFiles/index → parties/view → contacts/view. ' + fmt(M.index.cases) + ' cases took ' + fmt(M.index.calls) + ' calls, about ' + M.index.modelMinutes + ' minutes once at an assumed 2 requests a second. After that it refreshes nightly with <code>modified[gte]</code>, and contacts the bridge creates are indexed immediately.</p>' +
+    '<div class="g2" style="grid-template-columns: 1fr 1fr; align-items:start"><ul class="r">' +
+      [['link', 'ok', 'DOB + first + last name (nicknames incl. Pepe, Lupe, Chuy; accents; hyphens; swapped names)'], ['link', 'ok', 'DOB + phone or email + one name'], ['link', 'ok', 'Both names + phone or email, no DOB on file'], ['review', 'warn', 'Phone or email shared with a different DOB (relatives, Jr./Sr.)'], ['review', 'warn', 'Name only, or more than one match'], ['new', 'plain', 'Same name, different DOB, nothing shared']].map(function (r) { return '<li><span class="tag ' + r[1] + '">' + r[0] + '</span><span>' + esc(r[2]) + '</span></li>'; }).join('') +
+    '</ul><div><p>Measured on ' + fmt(dd.existing) + ' synthetic clients and 300 leads with known answers. Returning clients were typed 11 ways; 30 lookalikes share a name or phone with an existing client:</p><div class="lg"><span><i style="background:var(--accent)"></i>linked right</span><span><i style="background:var(--navy)"></i>new</span><span><i style="background:var(--amber)"></i>review</span></div>' + bar('Returning (120)', dd.returning) + bar('New (150)', dd.fresh) + bar('Lookalikes (30)', dd.lookalike) + '<p class="small"><b>Wrong links: ' + dd.wrongLinks + '.</b> On review, the lead waits and GoHighLevel gets a tag plus a note with the candidate contact IDs. Staff resolve it with one call.</p></div></div>' +
+    '<h2>Injuries and failures</h2><p>Injury 1 rides in caseFiles/add. Injuries 2 and 3 are separate injuries/edit calls without an Injury ID, which MerusCase documents as “add”. MerusCase takes no idempotency key, so every write is journalled. When a reply is lost, the bridge reads the record back before sending again:</p>' +
+    '<table><thead><tr><th>Write</th><th>Read-back after a lost reply</th></tr></thead><tbody>' + [['caseFiles/add', 'caseFiles/index?modified[gte] → injuries/view + parties/view: same first injury and client, on a case no other intake owns'], ['injuries/edit', 'injuries/view: same date and type, not already recorded'], ['parties/add · activities/add', 'parties/view: the employer is on the case · activities/index: the marker [intake … signed] is there'], ['contacts/add (employer)', 'no read-back without a contact search: at worst one unattached duplicate employer, flagged']].map(function (r) { return '<tr><td><code>' + esc(r[0]) + '</code></td><td>' + esc(r[1]) + '</td></tr>'; }).join('') + '</tbody></table>' +
+    '<p style="margin-top:5px">Test day: ' + day.posted + ' deliveries (' + day.unique + ' leads, ' + day.redeliveries + ' sent twice) against 3,000 existing cases, with ' + day.faultsUsed + ' injected MerusCase failures (500 after saving, dropped connections, 500 before saving, 429):</p>' +
+    '<div class="st"><div><b>' + day.newCases + '</b><span>cases, ' + day.linked + ' for existing clients</span></div><div><b>' + day.census.injuriesNew + '</b><span>injuries, one POST each</span></div><div><b>' + day.reconciled + '</b><span>lost replies read back</span></div><div><b>0</b><span>duplicate cases, injuries, parties, notes</span></div></div>' +
+    '<table style="margin-top:6px"><thead><tr><th>Lead</th><th class="num">Leads</th><th class="num">Done</th><th class="num">Held</th><th class="num">Review</th><th>Why</th></tr></thead><tbody>' + (function () { var oc = {}; day.outcomes.forEach(function (o) { var k = o.kind; oc[k] = oc[k] || { n: 0, done: 0, held: 0, review: 0, r: [] }; oc[k].n++; oc[k][o.status]++; if (o.reason && oc[k].r.indexOf(o.reason) < 0) oc[k].r.push(o.reason); }); return Object.keys(oc).map(function (k) { var o = oc[k]; return '<tr><td>' + esc(k) + '</td><td class="num">' + o.n + '</td><td class="num">' + o.done + '</td><td class="num">' + o.held + '</td><td class="num">' + o.review + '</td><td class="small">' + esc(o.r.join(' · ')) + '</td></tr>'; }).join(''); })() + '<tr><td>repeat deliveries</td><td class="num">' + day.redeliveries + '</td><td colspan="4" class="small">first result returned; no second case</td></tr></tbody></table>' +
+    '<p class="small" style="margin-top:3px">3 held with reasons (CT without end date, unknown body part “spleen”, unmapped attorney). 3 sent to review (2 sharing a relative’s phone, 1 sharing a DOB and last name). A lead at another stage was ignored. Also tested: a kill right after a save is resumed without re-sending, and a refused step stops with the step named, then Retry resumes.</p>' +
+    '<div class="g2" style="margin-top:6px"><div><h3>Firm IDs, checked before go-live</h3><p><code>npm run check-config</code> checks the user IDs (users/index), the case type (caseTypes/index) and the activity types (activityTypes/index; --create adds missing ones) against your instance. Case status, venue, office and body-part IDs have no published list endpoint, so they are filled from your spreadsheet.</p></div>' +
+    '<div><h3>Handoff</h3><ol class="s"><li>GoHighLevel: Pipeline Stage Changed → Custom Webhook (Bearer) with the body template; Private Integration token for the tag and note.</li><li>MerusCase: OAuth app; confirm caseFiles/add, contacts/add and contacts/edit names from your spreadsheet; build the index once.</li><li>One Node service + one SQLite file; README covers the review queue, retries and re-indexing.</li></ol></div></div>' +
+    '<p class="small" style="margin-top:6px">Sources: MerusCase developer guide (endpoints; app setup and authentication), HighLevel help (Custom Webhook and Webhook actions), HighLevel API (Private Integration tokens). Assumed until your spreadsheet: caseFiles/add, contacts/add and contacts/edit field names and the response envelope. Modelled: 2 requests/s for the index estimate.</p>' +
+    foot;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+(function () {
+  'use strict';
+  var D = window.DATA, M = D.m, dd = M.dedupe, day = M.day, S = M.sample;
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = function (n) { return Number(n).toLocaleString('en-US'); };
+  var g = function (o, k) { return (o && o[k]) || 0; };
+  var pass = M.tests.filter(function (t) { return t.ok; }).length;
+  var src = { docs: 0, sheet: 0, gap: 0 }; M.fields.forEach(function (f) { src[f.source]++; });
+
+  $('kpis').innerHTML = [
+    [dd.wrongLinks + ' wrong links', 'from 300 test leads against ' + fmt(dd.existing) + ' synthetic clients; ' + g(dd.returning, 'linked-correct') + ' of ' + (g(dd.returning, 'linked-correct') + g(dd.returning, 'review')) + ' returning clients linked'],
+    ['0 duplicates', 'after ' + day.faultsUsed + ' injected failures, ' + day.reconciled + ' of them lost replies that were read back'],
+    ['1 POST per injury', day.census.injuriesNew + ' injuries on ' + day.newCases + ' cases: caseFiles/add, then injuries/edit'],
+    ['29 of 29 fields', src.docs + ' go to published MerusCase fields, ' + src.sheet + ' follow your spreadsheet, ' + src.gap + ' gaps solved'],
+    [pass + ' / ' + M.tests.length + ' tests', 'webhook, mapping, dedupe, failures, setup checks']
+  ].map(function (k) { return '<div class="kpi"><b>' + esc(k[0]) + '</b><span>' + esc(k[1]) + '</span></div>'; }).join('');
+
+  var tabs = [].slice.call(document.querySelectorAll('.tabs button'));
+  function show(id) { if (!$('p-' + id)) id = 'flow'; tabs.forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === id)); }); [].forEach.call(document.querySelectorAll('.panel'), function (p) { p.classList.toggle('on', p.id === 'p-' + id); }); }
+  tabs.forEach(function (b) { b.addEventListener('click', function () { history.replaceState(null, '', '#' + b.dataset.tab); show(b.dataset.tab); }); });
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+
+  // ---------------- FLOW ----------------
+  var box = function (t, s, cls) { return '<div class="box ' + (cls || '') + '"><b>' + esc(t) + '</b><span>' + s + '</span></div>'; };
+  var stp = function (n, t, s) { return '<div class="step"><i>' + n + '</i>' + box(t, s) + '</div>'; };
+  var log = S.posts.map(function (p, i) {
+    return '<details' + (i === 0 ? ' open' : '') + '><summary><span class="m">POST</span><span>' + esc(p.endpoint) + '</span><span class="n">' + p.fields.length + ' fields</span></summary><div class="kv">' +
+      p.fields.map(function (f) { return '<span>data' + esc(f[0]) + '</span><span>' + esc(f[1]) + '</span>'; }).join('') + '</div></details>';
+  }).join('') + '<details><summary><span class="m">GHL</span><span>tag + note on the contact</span><span class="n">write-back</span></summary><div class="kv"><span>tags</span><span>' + esc(S.ghl.tags[0].tags.join(', ')) + '</span><span>note</span><span>' + esc(S.ghl.notes[0].body) + '</span></div></details>';
+  $('p-flow').innerHTML =
+    '<h2>From “Signed” to a MerusCase case</h2><p class="intro">One-way intake, as the brief asks. GoHighLevel sends the lead once, when it reaches the stage. The bridge acknowledges in a few milliseconds (median ' + day.ackP50 + ' ms here), stores the lead under an idempotency key, then works through MerusCase one call at a time.</p>' +
+    '<div class="lanes">' +
+      '<div class="lane"><h3>GoHighLevel</h3>' + box('Opportunity moves to Signed', 'Workflow trigger: Pipeline Stage Changed, pipeline “Intake”, stage “Signed”') + box('Custom Webhook action', 'POST to the bridge, <code>Authorization: Bearer</code> token, JSON body from <code>ghl/custom-webhook-body.json</code> (' + Object.keys(D.template).length + ' keys, 3 injury slots)', 'key') + box('Gets told the result', 'tag <code>merus-case-created</code> + a note with the case ID, or <code>merus-needs-review</code> with the reason') + '</div>' +
+      '<div class="lane"><h3>Bridge</h3>' + box('Acknowledge and store', '202 in ~' + day.ackP50 + ' ms; a repeat delivery of the same lead returns the first result') + box('Check the data', 'CT end dates, future dates, unknown body parts, unmapped attorney, more than 3 injuries… A failing lead is held, not half-created', 'fork') + box('Find the client', 'local index of MerusCase contacts: link, review, or new', 'key') + box('Plan, then run with a journal', 'every write is recorded before and after it is sent') + '</div>' +
+      '<div class="lane"><h3>MerusCase</h3>' + stp(1, 'caseFiles/add', 'case + contact (or the existing contact ID) + injury 1') + stp(2, 'contacts/edit', 'returning clients only: fill blank fields, never overwrite') + stp(3, 'injuries/edit', 'injuries 2 and 3, one POST each') + stp(4, 'contacts/add → parties/add', 'employer, reused if already in MerusCase') + stp(5, 'activities/add', 'referral source; “Retainer signed” dated on the signed date') + '</div>' +
+    '</div>' +
+    '<h2>One lead, every request</h2><p class="intro">A synthetic client: ' + esc(S.body.first_name + ' ' + S.body.last_name) + ', one CT injury (wrists, shoulder, neck) and one specific injury (low back, left knee), employer and referral source filled in. These are the exact bodies the bridge sent. Injury fields use MerusCase’s published <code>injuries/edit</code> names. Case and contact field names in <code>caseFiles/add</code> are placeholders until they’re read from your spreadsheet.</p>' +
+    '<div class="log">' + log + '</div>';
+
+  // ---------------- FIELDS ----------------
+  var badge = function (s) { return s === 'docs' ? '<span class="badge b-docs">Published</span>' : s === 'sheet' ? '<span class="badge b-sheet">Your sheet</span>' : '<span class="badge b-gap">No API field</span>'; };
+  var rows = function (filter) {
+    return M.fields.filter(function (f) { return filter === 'all' || f.source === filter; }).map(function (f) {
+      return '<tr><td class="num">' + f.n + '</td><td>' + esc(f.label) + (f.required ? ' <span class="small">required</span>' : '') + '</td><td><code>' + esc(f.target) + '</code></td><td>' + badge(f.source) + '</td></tr>';
+    }).join('');
+  };
+  $('p-fields').innerHTML =
+    '<h2>Where each of the 29 fields lands</h2><p class="intro">The map lives in <code>config/mapping.csv</code>, laid out like your spreadsheet: export it as CSV and the bridge reads it as-is. The ' + src.docs + ' injury fields match MerusCase’s published <code>injuries/edit</code> parameters. The ' + src.sheet + ' contact and case fields follow your spreadsheet, because <code>caseFiles/add</code> isn’t in the public docs.</p>' +
+    '<div class="filters" role="group" aria-label="Filter fields">' + [['all', 'All 29'], ['docs', 'Published (' + src.docs + ')'], ['sheet', 'Your sheet (' + src.sheet + ')'], ['gap', 'No API field (' + src.gap + ')']].map(function (b, i) { return '<button data-f="' + b[0] + '" aria-pressed="' + (i === 0) + '">' + esc(b[1]) + '</button>'; }).join('') + '</div>' +
+    '<div class="tablewrap wide"><table class="t"><thead><tr><th class="num">#</th><th>Field</th><th>Goes to</th><th>Source</th></tr></thead><tbody id="frows">' + rows('all') + '</tbody></table></div>' +
+    '<h2>The three fields with no API field</h2><div class="grid3">' +
+      '<div class="card gap"><h3>Employer</h3><div class="where">contacts/add (company) → parties/add</div><p>The employer becomes a company contact attached to the case as a party. Before creating one, the bridge checks the index by normalised name, so “North Bay Builders, Inc.” and “NORTH BAY BUILDERS INC” share one contact. <code>parties/add</code> is published and takes only the contact and case IDs.</p><p class="small">If employers need a party role or group, set it from your spreadsheet (<code>partyGroups/index</code> lists them).</p></div>' +
+      '<div class="card gap"><h3>Referral source</h3><div class="where">activities/add · type “Intake: referral source”</div><p>A firm activity type, created once with <code>activityTypes/add</code>, keeps referral sources together in the case activity log and filterable by type. GoHighLevel keeps the same value for marketing reports.</p><p class="small">If the referrer is a person the firm tracks, such as a doctor or another attorney, they can be added as a party instead.</p></div>' +
+      '<div class="card gap"><h3>Signed date</h3><div class="where">activities/add · “Retainer signed”, date = signed date</div><p><code>activities/add</code> accepts a date (YYYY-MM-DD HH:MM:SS), so the entry sits on the case timeline on the day the client signed, not the day the bridge ran.</p><p class="small">If your spreadsheet shows <code>caseFiles/add</code> accepts <code>date_opened</code> (it is a filter on <code>caseFiles/index</code>), it can be set there too.</p></div>' +
+    '</div>';
+  [].forEach.call(document.querySelectorAll('#p-fields .filters button'), function (b) {
+    b.addEventListener('click', function () { [].forEach.call(document.querySelectorAll('#p-fields .filters button'), function (x) { x.setAttribute('aria-pressed', String(x === b)); }); $('frows').innerHTML = rows(b.dataset.f); });
+  });
+
+  // ---------------- DEDUPE ----------------
+  var bar = function (label, o, total) {
+    var segs = [['linked-correct', 'link'], ['new', 'new'], ['review', 'review'], ['linked-wrong', 'wrong']];
+    return '<div class="ob"><span>' + esc(label) + '</span><div class="track" role="img" aria-label="' + esc(label + ': ' + segs.map(function (s) { return g(o, s[0]) + ' ' + s[1]; }).join(', ')) + '">' +
+      segs.map(function (s) { var n = g(o, s[0]); return n ? '<div class="seg ' + s[1] + '" style="width:' + (n / total * 100).toFixed(2) + '%" title="' + n + ' ' + s[1] + '"></div>' : ''; }).join('') + '</div><span class="v">' + total + ' leads</span></div>';
+  };
+  var tot = function (o) { return Object.keys(o).reduce(function (s, k) { return s + o[k]; }, 0); };
+  var vrows = Object.keys(dd.byVariant).map(function (k) {
+    var o = dd.byVariant[k]; var parts = k.split(':');
+    var label = { exact: 'typed exactly the same', nickname: 'nickname (Bob, Pepe, Lupe…)', accents: 'accents dropped, caps', 'phone-format': 'phone in another format', 'new-phone': 'new phone, no email', 'email-case': 'email in capitals', hyphen: 'hyphen or case in last name', typo: 'two letters swapped in last name', swapped: 'first and last name swapped', 'name-dob-only': 'name and DOB only', 'middle-name': 'middle name added', 'same-name-other-dob': 'same name, different person', 'household-phone': 'relative sharing the phone', 'junior-same-phone': 'Jr. sharing the father’s phone' }[parts[1]] || parts[1];
+    return '<tr><td>' + (parts[0] === 'returning' ? 'Returning client' : 'Lookalike') + '</td><td>' + esc(label) + '</td><td class="num">' + g(o, 'linked-correct') + '</td><td class="num">' + g(o, 'review') + '</td><td class="num">' + g(o, 'new') + '</td><td class="num">' + g(o, 'linked-wrong') + '</td></tr>';
+  }).join('');
+  $('p-dedupe').innerHTML =
+    '<h2>“Check MerusCase for an existing contact” needs an index</h2><p class="intro">MerusCase’s published API reads a contact only by ID (<code>contacts/view/:id</code>). Your endpoint list adds <code>contacts/add</code> and <code>contacts/edit</code> but no search. So the bridge keeps a local index of your contacts, built through published endpoints only: <code>caseFiles/index</code> → <code>parties/view</code> per case → <code>contacts/view</code> per contact.</p>' +
+    '<div class="stat3"><div><b>' + fmt(M.index.calls) + '</b><span>calls to index ' + fmt(M.index.cases) + ' cases (measured on the stand-in)</span></div><div><b>~' + M.index.modelMinutes + ' min</b><span>one-time build at 2 requests a second (assumed; MerusCase publishes no rate limit)</span></div><div><b>changed cases only</b><span>nightly refresh with <code>caseFiles/index?modified[gte]=…</code></span></div><div><b>instant</b><span>a contact the bridge creates is indexed the moment MerusCase returns its ID</span></div></div>' +
+    '<h2>The rules, strictest first</h2><div class="grid2"><div class="card"><ul class="ladder">' +
+      [['link', 'b-ok', 'Date of birth, first and last name agree (nicknames, accents, hyphens and swapped first and last names allowed)'], ['link', 'b-ok', 'Date of birth and phone or email agree, plus one name'], ['link', 'b-ok', 'Both names and phone or email agree, and MerusCase has no date of birth on file'], ['review', 'b-warn', 'Phone or email on file for someone with a different date of birth (relatives, Jr. and Sr.)'], ['review', 'b-warn', 'Name only, or more than one contact matches'], ['new', 'b-plain', 'Same name, different date of birth, nothing else shared. Common names are common.']]
+        .map(function (r) { return '<li><span class="badge ' + r[1] + '">' + r[0] + '</span><span>' + esc(r[2]) + '</span></li>'; }).join('') +
+    '</ul></div><div class="card"><h3>What happens on “review”</h3><p>The intake waits. The GoHighLevel contact gets the tag <code>merus-needs-review</code> and a note listing the candidate MerusCase contact IDs and why they matched. Staff pick one, or confirm a new contact, with <code>POST /intakes/:id/resolve</code>. The case is created only after that.</p><p class="small">Linking an existing contact only fills blank fields. Where GoHighLevel and MerusCase disagree (a new address, a new phone), MerusCase is kept as is and the differences go into a case note for staff.</p></div></div>' +
+    '<h2>Measured on ' + fmt(dd.existing) + ' synthetic clients</h2><p class="intro">' + fmt(dd.existing) + ' invented clients were loaded into the stand-in MerusCase and indexed through the indexer above. Then 300 leads with known answers were checked: returning clients typed in ten different ways, brand-new people, and 30 lookalikes who share a name or phone with an existing client.</p>' +
+    '<div class="legend"><span><i style="background:var(--accent)"></i>linked to the right contact</span><span><i style="background:var(--navy)"></i>new contact</span><span><i style="background:var(--amber)"></i>sent to review</span><span><i style="background:var(--bad)"></i>linked to the wrong contact</span></div>' +
+    bar('Returning clients', dd.returning, tot(dd.returning)) + bar('New people', dd.fresh, tot(dd.fresh)) + bar('Lookalikes', dd.lookalike, tot(dd.lookalike)) +
+    '<p class="small">Wrong links: ' + dd.wrongLinks + '. Each lead was compared with about ' + dd.avgCandidates + ' indexed contacts on average. All 300 checks took ' + dd.matchMs + ' ms.</p>' +
+    '<div class="tablewrap wide" style="margin-top:12px"><table class="t"><thead><tr><th>Lead</th><th>How it was typed</th><th class="num">Linked</th><th class="num">Review</th><th class="num">New</th><th class="num">Wrong link</th></tr></thead><tbody>' + vrows + '</tbody></table></div>';
+
+  // ---------------- SAFETY ----------------
+  var oc = {}; day.outcomes.forEach(function (o) { var k = o.kind; oc[k] = oc[k] || { n: 0, done: 0, held: 0, review: 0, reasons: [] }; oc[k].n++; oc[k][o.status]++; if (o.reason && oc[k].reasons.indexOf(o.reason) < 0) oc[k].reasons.push(o.reason); });
+  var ocRows = Object.keys(oc).map(function (k) { var o = oc[k]; return '<tr><td>' + esc(k) + '</td><td class="num">' + o.n + '</td><td class="num">' + o.done + '</td><td class="num">' + o.held + '</td><td class="num">' + o.review + '</td><td class="small">' + esc(o.reasons.join(' · ')) + '</td></tr>'; }).join('');
+  $('p-safety').innerHTML =
+    '<h2>One injury per POST</h2><p class="intro">MerusCase takes one injury per request. Injury 1 goes with the case in <code>caseFiles/add</code>. Each further injury is its own <code>injuries/edit</code> without an Injury ID, which MerusCase documents as “add a new injury”. Each injury carries its own type (1 = CT, 2 = Specific), dates in MM/DD/YYYY, up to 10 body parts with left/right, and its own claim and ADJ numbers. On the test day, ' + day.census.injuriesNew + ' injuries were filed on ' + day.newCases + ' cases.</p>' +
+    '<h2>Lost replies don’t become duplicates</h2><p class="intro">MerusCase takes no idempotency key. If a write times out or returns a 500, the bridge can’t tell whether it was saved. Every write is journalled. When the outcome is unknown, the bridge looks for the record before it sends the request again.</p>' +
+    '<div class="states"><span>pending</span><span class="arrow">→</span><span>sent</span><span class="arrow">→</span><span class="ok">done</span><span class="arrow">or</span><span class="warn">unknown</span><span class="arrow">→</span><span>read back</span><span class="arrow">→</span><span class="ok">found: done</span><span class="arrow">/</span><span>not found: send again</span></div>' +
+    '<div class="tablewrap wide"><table class="t"><thead><tr><th>Write</th><th>How the bridge checks after a lost reply</th></tr></thead><tbody>' +
+      [['caseFiles/add', 'caseFiles/index?modified[gte]=… then injuries/view and parties/view: same first injury and same client on a case no other intake owns'], ['injuries/edit', 'injuries/view on the case: same date and type, not already recorded'], ['parties/add', 'parties/view: employer contact already on the case'], ['activities/add', 'activities/index: each note carries a marker such as [intake contact:… signed]'], ['contacts/edit', 'safe to send twice (fills the same blanks)'], ['contacts/add (employer)', 'can’t be read back without a contact search: at worst one unattached duplicate employer, listed in the step note']]
+        .map(function (r) { return '<tr><td><code>' + esc(r[0]) + '</code></td><td>' + esc(r[1]) + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+    '<h2>A test day of intake</h2><p class="intro">' + day.posted + ' webhook deliveries against a stand-in holding ' + fmt(dd.existing) + ' existing cases: ' + day.unique + ' leads, ' + day.redeliveries + ' of them sent twice, and ' + day.faultsUsed + ' injected MerusCase failures. The failures were 500s after saving, dropped connections, 500s before saving and 429 rate limits.</p>' +
+    '<div class="stat3"><div><b>' + day.newCases + '</b><span>cases created, ' + day.linked + ' of them for existing clients</span></div><div><b>' + day.reconciled + '</b><span>lost replies found by reading back</span></div><div><b>0</b><span>duplicate cases, injuries, parties or notes</span></div><div><b>' + day.ackP50 + ' ms</b><span>median time to acknowledge GoHighLevel (p95 ' + day.ackP95 + ' ms)</span></div></div>' +
+    '<div class="tablewrap wide" style="margin-top:14px"><table class="t"><thead><tr><th>Lead</th><th class="num">Leads</th><th class="num">Done</th><th class="num">Held</th><th class="num">Review</th><th>Why</th></tr></thead><tbody>' + ocRows + '<tr><td>other stage (“Consult booked”)</td><td class="num">' + g(day.byKind, 'ignored: other stage') + '</td><td colspan="4" class="small">ignored with a 200; only “Signed” starts an intake</td></tr><tr><td>repeat deliveries</td><td class="num">' + day.redeliveries + '</td><td colspan="4" class="small">returned the first result; no second case</td></tr></tbody></table></div>' +
+    '<p class="small" style="margin-top:8px">One brand-new lead went to review: it shared a date of birth and a last name with an existing client. That’s what the rules intend, because a misspelt first name would look the same.</p>' +
+    '<h3>Also tested</h3><ul class="checks">' + ['A kill right after MerusCase saved injury 3: on restart the journal says “sent”, the bridge reads injury 3 back and finishes without sending it again.', 'MerusCase refusing a step (400): the intake stops with the step named. After the fix, Retry resumes from that step.', 'A held lead fixed in GoHighLevel and sent again replaces the stored copy and runs.', 'The same client signing again later (a new signed date) gets a new case on the existing contact.'].map(function (t) { return '<li><span class="badge b-ok">✓</span><span>' + esc(t) + '</span></li>'; }).join('') + '</ul>';
+
+  // ---------------- SETUP ----------------
+  var F = D.firm;
+  var tpl = JSON.stringify(D.template, null, 2).split('\n').slice(0, 14).join('\n') + '\n  …';
+  $('p-setup').innerHTML =
+    '<h2>Your MerusCase IDs, checked before go-live</h2><p class="intro">The firm-specific IDs live in <code>config/firm.json</code>. <code>npm run check-config</code> checks them against your instance through published endpoints and lists the ones that can only be checked by hand. The values shown are placeholders.</p>' +
+    '<div class="console"><span class="d">$ npm run check-config -- --create</span>\n' +
+      Object.keys(F.users).map(function (u) { return '<span class="k">ok      </span> user "' + esc(u) + '" = ' + F.users[u]; }).join('\n') + '\n<span class="k">ok      </span> case type ' + F.caseFile.case_type_id + '  <span class="d">(caseTypes/index)</span>\n' +
+      Object.keys(F.activityTypes).map(function (k) { return '<span class="k">ok      </span> activity type "' + esc(F.activityTypes[k].label) + '" = ' + F.activityTypes[k].id + '  <span class="d">(activityTypes/index; --create adds it)</span>'; }).join('\n') + '\n' +
+      '<span class="v">manual  </span> case status ' + F.caseFile.case_status_id + ', office ' + F.caseFile.office_id + ', venues by county, body-part IDs  <span class="d">(no published list endpoint: from your spreadsheet)</span></div>' +
+    '<div class="grid2" style="margin-top:16px"><div class="card"><h3>GoHighLevel</h3><ol class="setup"><li>Workflow trigger: <b>Pipeline Stage Changed</b>, pipeline Intake, stage Signed.</li><li>Action: <b>Custom Webhook</b>, POST to <code>/hooks/ghl/signed</code>, authorisation <b>Bearer token</b>, raw JSON body from <code>ghl/custom-webhook-body.json</code>. The plain Webhook action also works, with the token as <code>?key=</code>.</li><li>Custom field keys match the template (<code>injury_1_date</code> …). A merge tag left unrendered is read as blank.</li><li>Private Integration token with contacts scope, for the tag and note. HighLevel recommends rotating it every 90 days.</li></ol></div>' +
+    '<div class="card"><h3>MerusCase</h3><ol class="setup"><li>Register an OAuth app: authorization-code flow, then calls with <code>Authorization: Bearer</code>.</li><li>Confirm the <code>caseFiles/add</code>, <code>contacts/add</code> and <code>contacts/edit</code> field names and response format from your spreadsheet. They aren’t in the public docs.</li><li>Fill in <code>config/firm.json</code> and <code>config/bodyparts.json</code>, then run check-config.</li><li>Build the contact index once (<code>npm run index -- --full</code>). It then refreshes nightly.</li></ol></div></div>' +
+    '<h3>Body template (first lines)</h3><div class="console">' + esc(tpl) + '</div>' +
+    '<h3>Runs as</h3><p class="intro">One small Node service with a single SQLite file and no other dependencies. The webhook token, the admin token and both API tokens come from environment variables. Lead data needed for retries stays in the file, and logs leave out dates of birth, phones and emails. The handoff README covers setup, the review queue, retries and re-indexing.</p>';
+
+  // ---------------- TESTS ----------------
+  var byFile = {}; M.tests.forEach(function (t) { (byFile[t.file] = byFile[t.file] || []).push(t); });
+  var about = { 'units.test.js': 'Mapping, formats and checks', 'e2e.test.js': 'Webhook to MerusCase, end to end', 'faults.test.js': 'Lost replies, crashes and refusals', 'dedupe.test.js': 'Contact matching', 'setup.test.js': 'Go-live checks and the index' };
+  $('p-tests').innerHTML = '<h2>' + pass + ' of ' + M.tests.length + ' tests pass</h2><p class="intro"><code>npm test</code> runs them all against the stand-in MerusCase and a stand-in GoHighLevel. The numbers on this page come from <code>npm run bench</code> → <code>results/measurements.json</code>.</p><div class="grid2">' +
+    Object.keys(byFile).map(function (f) { return '<div class="card"><h3>' + esc(about[f] || f) + '</h3><p class="small"><code>test/' + esc(f) + '</code> · ' + byFile[f].length + ' tests</p><ul class="checks">' + byFile[f].map(function (t) { return '<li><span class="badge ' + (t.ok ? 'b-ok">✓' : 'b-bad">✕') + '</span><span>' + esc(t.name) + '</span></li>'; }).join('') + '</ul></div>'; }).join('') + '</div>' +
+    '<h3>Files</h3><div class="tablewrap"><table class="t"><thead><tr><th>File</th><th class="num">Lines</th></tr></thead><tbody>' + D.files.map(function (f) { return '<tr><td><code>' + esc(f.file) + '</code></td><td class="num">' + f.lines + '</td></tr>'; }).join('') + '</tbody></table></div>';
+
+  // ---------------- footer ----------------
+  $('foot').innerHTML = '<div class="cols"><div><h3>Measured and assumed</h3><ul>' +
+    '<li><b>Measured</b> by running the bridge against a stand-in MerusCase and a stand-in GoHighLevel. The stand-in follows MerusCase’s published endpoints and parameters.</li>' +
+    '<li><b>Assumed until your spreadsheet:</b> the field names and response format of <code>caseFiles/add</code>, <code>contacts/add</code> and <code>contacts/edit</code>. They aren’t in the public docs.</li>' +
+    '<li><b>Synthetic:</b> every person, case, employer and ID on this page is invented. Firm IDs and body-part IDs are placeholders.</li>' +
+    '<li><b>Modelled:</b> 2 requests a second to MerusCase for the index estimate. MerusCase publishes no rate limit.</li></ul><p style="margin-top:10px"><a href="ghl-merus-intake-bridge.pdf">Two-page PDF of this sample</a></p></div>' +
+    '<div><h3>Sources</h3><ul><li><a href="https://docs.meruscase.com/guides/developers-guide/endpoints.html">MerusCase API endpoints</a> (injuries/edit, parties/add, activities/add, caseFiles/index filters)</li><li><a href="https://docs.meruscase.com/guides/developers-guide/authentication.html">MerusCase app setup and authentication</a></li><li><a href="https://help.gohighlevel.com/support/solutions/articles/155000003305-workflow-action-custom-webhook">HighLevel: Custom Webhook action</a></li><li><a href="https://gohighlevelassist.freshdesk.com/support/solutions/articles/155000003299-workflow-action-webhook-outbound-">HighLevel: Webhook (Outbound) action</a></li><li><a href="https://marketplace.gohighlevel.com/docs/Authorization/PrivateIntegrationsToken.md">HighLevel: Private Integration tokens</a></li></ul></div></div>';
+
+  show(location.hash.slice(1) || 'flow');
+})();

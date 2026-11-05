@@ -1,0 +1,13 @@
+{
+  "_note": "Body-part words -> MerusCase body part IDs. PLACEHOLDER IDs: replace with the IDs from Hegwer Law's MerusCase (the injuries/edit fields q1_injury_description_N_id take IDs, not text). Laterality is read from left/right/bilateral words and sent as q1_injury_description_N_lr (0 N/A, 1 L, 2 R, 3 LR).",
+  "parts": {
+    "head": 1, "neck": 2, "cervical spine": 2, "upper back": 3, "thoracic spine": 3, "low back": 4, "lower back": 4, "lumbar spine": 4, "back": 4,
+    "shoulder": 5, "arm": 6, "elbow": 7, "forearm": 8, "wrist": 9, "hand": 10, "fingers": 11, "finger": 11, "thumb": 11,
+    "hip": 12, "leg": 13, "knee": 14, "ankle": 15, "foot": 16, "toes": 17,
+    "chest": 18, "abdomen": 19, "groin": 20, "eyes": 21, "eye": 21, "ears": 22, "hearing": 22, "teeth": 23, "jaw": 24,
+    "psyche": 25, "psych": 25, "anxiety": 25, "depression": 25, "sleep": 26, "headaches": 27, "internal": 28, "hypertension": 29, "skin": 30,
+    "multiple": 99
+  },
+  "sided": ["shoulder", "arm", "elbow", "forearm", "wrist", "hand", "fingers", "finger", "thumb", "hip", "leg", "knee", "ankle", "foot", "toes", "eyes", "eye", "ears"],
+  "maxPerInjury": 10
+}
